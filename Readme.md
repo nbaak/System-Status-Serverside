@@ -4,7 +4,7 @@ This Service enables a View on the CPU Temperature, the Memory Usage and the Sto
 
 
 
-## Dependancies
+## Dependencies
 
 pip3 install Flask
 pip3 install psutil
