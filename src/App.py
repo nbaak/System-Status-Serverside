@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask
+import os
 import shutil
 import json
 import psutil
@@ -11,7 +12,7 @@ app = Flask(__name__)
 config = {}
 # todo: redo configuration
 try:
-    cfg = Config('config.json')
+    cfg = Config(os.path.dirname(__file__)+'config.json')
     print ("config found")
     config["disks"] = cfg.disks
 except:
