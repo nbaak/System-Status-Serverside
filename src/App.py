@@ -12,7 +12,7 @@ app = Flask(__name__)
 config = {}
 # todo: redo configuration
 try:
-    cfg = Config(os.path.dirname(__file__)+'config.json')
+    cfg = Config(os.path.dirname(__file__)+'/config.json')
     print ("config found")
     config["disks"] = cfg.disks
 except:
