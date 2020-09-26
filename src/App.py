@@ -8,15 +8,17 @@ from Config import Config
 
 app = Flask(__name__)
 
+config = {}
+# todo: redo configuration
 try:
-    config = Config('config.json')
-    print ("no config found")
+    cfg = Config('config.json')
+    print ("config found")
+    config["disks"] = cfg.disks
 except:
-    config = {}
-    config["disks"] = ["/"]
-    
+    config["disks"] = ["/"]    
     print ("virtual config created")
-    print (config)
+    
+print (config)
 
 @app.route("/status")
 def status():
