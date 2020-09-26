@@ -1,16 +1,29 @@
+#!/usr/bin/env python3
+
 from flask import Flask
 import shutil
 import json
 import psutil
+from Config import Config
 
 app = Flask(__name__)
+
+try:
+    config = Config(app.config.get('PROJECT_ROOT') + 'config.json')
+    print ("no config found")
+except:
+    config = {}
+    config["disks"] = ["/"]
+    
+    print ("virtual config created")
+    print (config)
 
 @app.route("/status")
 def status():
     '''
     returns system stats like harddisk storage, memory usage and cpu temperature
     '''
-    data = {'storage': disk_usage(),
+    data = {'storage': disks_usage(),
             'memory': memory_usage(),
             'cpu': cpu_stats()}
 
@@ -46,11 +59,11 @@ def cpu_frequencys(pc = True):
     if pc:
         for freq in freqs:
             # frequencies in MHz
-             d = {'current': freq.current,
+            d = {'current': freq.current,
                   'min': freq.min,
                   'max': freq.max}
              
-             data.append(d)
+            data.append(d)
     else:
         data = freqs
 
@@ -66,10 +79,23 @@ def memory_usage():
             }
     return data
 
-def disk_usage():
-    total, used, free = shutil.disk_usage('/')
+def disks_usage():
+    global config
+    print ("disks usage")
+    print (config)
+    
+    
+    usage = []
+    for disk in config["disks"]:
+        usage.append(disk_usage(disk))
+        
+    return usage
+
+def disk_usage(disk = "/"):
+    total, used, free = shutil.disk_usage(disk)
     # data in GB
-    data = {'total': default_value(round(total / 2**30,2), 100),
+    data = {'disk': disk,
+            'total': default_value(round(total / 2**30,2), 100),
             'used': default_value(round(used / 2**30,2), 100),
             'free': default_value(round(free / 2**30,2), 100),
             'percent': default_value(round(used/total * 100, 2), 100)
