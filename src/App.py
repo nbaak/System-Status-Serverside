@@ -9,7 +9,7 @@ from Config import Config
 app = Flask(__name__)
 
 try:
-    config = Config(app.config.get('PROJECT_ROOT') + 'config.json')
+    config = Config('config.json')
     print ("no config found")
 except:
     config = {}
